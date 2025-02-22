@@ -11,7 +11,6 @@ This project demonstrates the deployment of a scalable multi-tier Java web appli
 - **Message Broker**: RabbitMQ EC2 instance for handling asynchronous messaging
 - **Application Layer**: Tomcat EC2 instances in an Auto Scaling Group to ensure scalability
 - **Load Balancer**: AWS Application Load Balancer for traffic distribution
-- **Reverse Proxy**: NGINX to handle incoming requests efficiently
 - **Artifact Storage**: Amazon S3 bucket for storing application artifacts
 - **Domain Management**: Route 53 (public & private zones) for DNS resolution
 - **Security Groups**: Configured at each layer for controlled access
@@ -51,17 +50,13 @@ This project demonstrates the deployment of a scalable multi-tier Java web appli
    - Create an Application Load Balancer.
    - Configure listeners to handle HTTPS traffic (443) and forward to Tomcat instances.
    - Use AWS Certificate Manager to issue an SSL certificate.
-10. **Map ELB Endpoint to Website Name in GoDaddy DNS**
-    - Update GoDaddy DNS records to point to the ELB domain.
+10. **Map ELB Endpoint to Website Name in Route 53 DNS**
+    - Update  Route 53 DNS records to point to the ELB domain.
 11. **Verify Deployment**
     - Access the application via the ELB URL or custom domain.
-    - Check logs to confirm correct setup:
-      ```bash
-      tail -f /var/log/tomcat/catalina.out
-      ```
 12. **Set Up Auto Scaling Group for Tomcat Instances**
     - Define scaling policies to ensure high availability.
-    - Configure CloudWatch alarms for proactive monitoring.
+    - Configure simple notification service alarms for proactive monitoring.
 
 ## File Structure
 ```
@@ -86,17 +81,13 @@ src/
 ├── pom.xml
 ```
 
-## Deployment Architecture Diagram
-Refer to the provided architecture diagram for a detailed visualization of the AWS infrastructure setup.
-
 ## Key Configurations
-- **Tomcat Instances** automatically pull the latest application artifact from S3 at startup.
+- **Tomcat Instances** pull the latest application artifact from S3 at startup.
 - **Memcached** optimizes database queries by caching frequently accessed data.
 - **RabbitMQ** ensures reliable messaging between application components.
 - **MariaDB (MySQL)** provides durable and scalable data storage.
-- **NGINX** functions as a reverse proxy to handle HTTP/S requests.
 - **Auto Scaling** automatically adjusts the number of Tomcat instances based on traffic demand.
-- **CloudWatch Monitoring** tracks system health and application performance.
+- **SNS** tracks system health and application performance.
 
 ## Prerequisites
 - Active AWS account with IAM permissions.
@@ -104,20 +95,6 @@ Refer to the provided architecture diagram for a detailed visualization of the A
 - AWS Key Pair generated for SSH access.
 - Maven installed for building the Java application.
 - Route 53 domain registered (optional, for custom domain mapping).
-
-## How to Deploy
-1. Clone the repository:
-   ```bash
-   git clone <repo-url>
-   cd <repo-directory>
-   ```
-2. Configure AWS CLI:
-   ```bash
-   aws configure
-   ```
-3. Run the provided BASH scripts inside the `userdata/` directory to provision instances and set up services.
-4. Follow the "Flow of Execution" steps to complete the deployment.
-5. Validate by accessing the application through the configured domain or ELB endpoint.
 
 ## Troubleshooting
 - **EC2 Instance Not Accessible?**
