@@ -1,5 +1,9 @@
 # AWS Deployment of Multi-Tier Java Web Application
 
+## Deployment Architecture Diagram
+![AWS Deployment Architecture](diagram.png)
+
+
 ## Project Overview
 This project demonstrates the deployment of a scalable multi-tier Java web application on AWS using industry best practices. The architecture consists of:
 - **Database Layer**: MariaDB (MySQL EC2 instance) for persistent data storage
